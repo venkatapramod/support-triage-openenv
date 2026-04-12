@@ -241,15 +241,16 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
     - Multiple overlapping domains where the "obvious" categorization is wrong
     - Emotional language that biases toward wrong priority levels
     - Cross-departmental issues where routing is non-obvious
-    - Subtle distinctions between similar categories
+    - Diverse ground truths — NOT dominated by technical/critical/engineering
     """
     return [
         {
             "id": "HARD-001",
-            "subject": "Multiple issues - urgent help needed",
+            "subject": "URGENT: SSO down, admin deleted, exports broken",
             "body": "URGENT: We're having a total meltdown here. First, our enterprise SSO stopped working at 2 AM, locking out 200+ employees. Second, while trying to fix it, someone accidentally deleted the admin account. Third, we have a board presentation at 9 AM today using data from your platform and the export feature is returning blank files. We're a Fortune 500 customer paying $50k/year. I need someone on the phone NOW.",
             "customer_name": "Margaret Thompson",
             "customer_tier": "enterprise",
+            # Straightforward: multi-system technical failure
             "ground_truth": {
                 "category": "technical",
                 "priority": "critical",
@@ -258,13 +259,12 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
         },
         {
             "id": "HARD-002",
-            "subject": "Compliance concern - GDPR data deletion request",
+            "subject": "GDPR Article 17 - formal data deletion request",
             "body": "Per GDPR Article 17, I'm formally requesting the complete deletion of all personal data associated with my account (user ID: EU-78432) and any associated sub-accounts. This includes backups, logs, analytics data, and any third-party systems where my data may have been shared. I need written confirmation within 30 days as required by regulation. Please also provide a list of all third parties who have received my data. Note: I still want to keep using the service with a fresh account afterward.",
             "customer_name": "Hans Mueller",
             "customer_tier": "pro",
-            # Trap: LLMs often classify this as "general" or "technical".
-            # It's an account/legal matter routed to admin (compliance team).
-            # Priority is critical due to legal deadline.
+            # Trap: LLMs see "data deletion" and pick technical/engineering.
+            # But this is a legal/compliance request → account + admin.
             "ground_truth": {
                 "category": "account",
                 "priority": "critical",
@@ -273,39 +273,42 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
         },
         {
             "id": "HARD-003",
-            "subject": "Potential security breach detected",
-            "body": "Our security team has detected unusual API activity on our enterprise account. Between 1 AM and 4 AM UTC, someone made 50,000+ API calls from an IP address in a country where we have no employees (185.234.xxx.xxx). The calls were reading customer records from our database via your API. We've rotated our API keys but need to know: 1) Was there a breach on your end? 2) What data was accessed? 3) Do we need to file an incident report? Our legal team is standing by. We may also need to notify affected customers under breach notification laws.",
-            "customer_name": "James O'Brien",
+            "subject": "Our contract says unlimited storage but you're throttling us",
+            "body": "I'm extremely frustrated. Our Enterprise contract (signed Jan 2023, 3-year term) explicitly states 'unlimited cloud storage' in Section 4.2. Yesterday we received an email saying we've exceeded a '5TB fair use limit' that appears nowhere in our contract, and our upload speeds have been throttled to 1 Mbps. Our legal counsel has reviewed the contract and confirms there is no fair use clause. We demand immediate restoration of full upload speeds and a written acknowledgment that no storage limits apply to our account. If not resolved by EOD Friday, we'll be filing a formal breach of contract claim.",
+            "customer_name": "Victoria Sterling",
             "customer_tier": "enterprise",
-            # Trap: legal language may bias toward admin/legal department.
-            # But this is a security incident — engineering must investigate first.
-            "ground_truth": {
-                "category": "technical",
-                "priority": "critical",
-                "department": "engineering",
-            }
-        },
-        {
-            "id": "HARD-004",
-            "subject": "Invoice dispute and contract renewal question",
-            "body": "Hi, three things: 1) Invoice #INV-2024-0892 includes charges for 75 seats but we only have 52 active users. Your own docs say inactive seats are auto-released after 30 days. Please credit $2,875. 2) Our contract renewal is in 6 weeks and we'd like to discuss volume pricing for scaling to 200 seats. 3) Can we get the educational discount? We're a university research lab but signed up under our department's corporate entity.",
-            "customer_name": "Dr. Patricia Huang",
-            "customer_tier": "enterprise",
+            # Trap: mentions technical symptoms (throttling), legal threats,
+            # and contract terms. LLMs often pick technical or admin/legal.
+            # But this is fundamentally a billing/contract dispute → finance.
             "ground_truth": {
                 "category": "billing",
-                "priority": "high",
+                "priority": "critical",
                 "department": "finance",
             }
         },
         {
+            "id": "HARD-004",
+            "subject": "Need to consolidate 3 separate company accounts after merger",
+            "body": "Following our acquisition of TechCorp and DataFlow Inc last month, we now have 3 separate enterprise accounts on your platform (IDs: ENT-001, ENT-445, ENT-892) that need to be merged into one. Combined we have 800+ users, 15TB of data, and hundreds of custom integrations. We need: 1) All data migrated to a single account without any loss, 2) User permissions preserved from all three accounts, 3) Billing consolidated to a single invoice, 4) API keys and webhooks remapped. Our CTO wants this done within 60 days. What's the process?",
+            "customer_name": "Richard Yamamoto",
+            "customer_tier": "enterprise",
+            # Trap: mentions billing, technical (API keys, integrations), and
+            # data migration. LLMs may pick technical or billing.
+            # But this is account management — complex account consolidation.
+            "ground_truth": {
+                "category": "account",
+                "priority": "high",
+                "department": "customer_success",
+            }
+        },
+        {
             "id": "HARD-005",
-            "subject": "Frustrated with ongoing performance issues - SLA violation",
-            "body": "This is my FOURTH ticket about the same issue. Every day between 2-4 PM EST, our dashboard becomes unusably slow (30+ second load times). Previous tickets #1234, #1567, and #1890 were all closed with 'resolved' but NOTHING has changed. Your support team keeps blaming our network but I've done traceroutes, tested from 3 different ISPs and offices. We're in month 2 of a 3-year contract and I'm talking to our legal team about the SLA violation clause. If this isn't fixed this week, we're escalating to your VP of Engineering. I have all the evidence documented.",
+            "subject": "Frustrated with ongoing performance - SLA violation",
+            "body": "This is my FOURTH ticket about the same issue. Every day between 2-4 PM EST, our dashboard becomes unusably slow (30+ second load times). Previous tickets #1234, #1567, and #1890 were all closed with 'resolved' but NOTHING has changed. Your support team keeps blaming our network but I've done traceroutes, tested from 3 different ISPs and offices. We're in month 2 of a 3-year contract and I'm talking to our legal team about the SLA violation clause. If this isn't fixed this week, we're escalating to your VP of Engineering.",
             "customer_name": "Robert Kim",
             "customer_tier": "enterprise",
-            # Trap: the legal/SLA/contract language may bias toward "account" or
-            # "billing" or "admin". But the root issue is a recurring technical
-            # performance problem.
+            # Trap: legal/SLA language may bias toward billing/admin.
+            # But the root issue is a recurring technical performance problem.
             "ground_truth": {
                 "category": "technical",
                 "priority": "critical",
@@ -314,28 +317,14 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
         },
         {
             "id": "HARD-006",
-            "subject": "Webhook schema change exposing PII - compliance risk",
-            "body": "After your last release (v4.2.1), webhooks now include PII fields (email, phone) in the payload that weren't there before. We're sending these webhooks to a third-party analytics tool that is NOT approved for PII in our security policy. Was this an intentional feature addition or a regression? Either way, we need to either: a) roll back the webhook schema, or b) add field-level filtering. This is a potential compliance violation for us under SOC2 requirements and we need it resolved within 48 hours.",
-            "customer_name": "Samantha Wright",
+            "subject": "Your sales rep promised features that don't exist",
+            "body": "Before signing our $120k/year enterprise contract, your sales rep Jake (ext 4421) specifically demonstrated a 'real-time collaboration' feature during our eval. He showed us live co-editing of documents with presence indicators and conflict resolution. We signed largely because of this capability. Now that we're onboarded, this feature doesn't exist anywhere in the product. When I asked support, they said it's 'on the roadmap for Q4.' We signed a contract based on a feature demo that was apparently faked. I want either: a) the feature delivered within 30 days as demonstrated, or b) a full contract refund. Our legal team is preparing a misrepresentation claim.",
+            "customer_name": "Natasha Volkov",
             "customer_tier": "enterprise",
-            # Trap: SOC2/compliance language biases toward admin department.
-            # But this is a code change (webhook schema) that engineering must fix.
-            "ground_truth": {
-                "category": "technical",
-                "priority": "critical",
-                "department": "engineering",
-            }
-        },
-        {
-            "id": "HARD-007",
-            "subject": "Migration stalled - sales promises unfulfilled",
-            "body": "We're migrating from Competitor X to your platform. We have 2TB of historical data, 500 custom workflows, and 150 integrations. Your sales rep promised 'white-glove migration support' but it's been 3 weeks and we haven't been assigned a migration engineer. Our contract with Competitor X ends in 45 days and if we don't start NOW we'll have to renew with them for another year at $200k. Can someone please take ownership of this? We need a migration plan, a dedicated engineer, and weekly check-ins.",
-            "customer_name": "Amanda Foster",
-            "customer_tier": "enterprise",
-            # Trap: mentions sales promises and costs ($200k), biasing toward
-            # billing/finance. But this is an account management / onboarding
-            # issue for customer_success. The $200k is competitor cost, not a
-            # billing dispute.
+            # Trap: mentions technical features, legal action, and refund.
+            # LLMs often pick billing (refund) or technical (feature).
+            # But this is a sales misrepresentation / account escalation
+            # that customer_success must handle.
             "ground_truth": {
                 "category": "account",
                 "priority": "critical",
@@ -343,14 +332,14 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             }
         },
         {
-            "id": "HARD-008",
-            "subject": "Bulk order damaged in transit - insurance claim needed",
-            "body": "We received our bulk hardware order (PO #BLK-2024-445, 50 units, total value $125,000) and 12 units arrived with cracked screens. We need: 1) Immediate replacement of the 12 damaged units, 2) Info on filing an insurance claim with the carrier, 3) A credit for the shipping cost since the damage was due to inadequate packaging, 4) An expedited reshipping timeline because we have a deployment deadline in 2 weeks. Photos of the damage attached. Our warehouse team has preserved all original packaging.",
-            "customer_name": "Victor Nakamura",
+            "id": "HARD-007",
+            "subject": "International shipping nightmare - customs seizure",
+            "body": "Our bulk order of 200 units (PO #INTL-7789, value $340,000) has been seized by German customs because the commercial invoice lists the wrong HS tariff code and the country of origin is missing. The customs broker says the shipment will be destroyed if proper documentation isn't provided within 10 business days. We also discovered the declared value on the export docs shows $50,000 instead of $340,000 — this looks like it could be flagged as customs fraud. We need corrected commercial invoices, proper certificates of origin, and someone to liaise with our customs broker in Frankfurt IMMEDIATELY. This is a potential criminal matter if not resolved.",
+            "customer_name": "Klaus Weber",
             "customer_tier": "enterprise",
-            # Trap: $125k value and "credit" language bias toward billing/finance.
-            # But the primary action is shipping/logistics (replacements, insurance,
-            # reshipment).
+            # Trap: criminal/legal language biases toward admin. Dollar amounts
+            # bias toward billing/finance. But this is a shipping/logistics
+            # crisis — incorrect shipping documentation.
             "ground_truth": {
                 "category": "shipping",
                 "priority": "critical",
@@ -358,14 +347,13 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             }
         },
         {
-            "id": "HARD-009",
-            "subject": "Audit log gaps - SOC2 compliance at risk",
-            "body": "During our SOC2 audit preparation, we discovered gaps in the audit logs your platform provides. Specifically: 1) User deletion events from January are missing entirely. 2) Permission change logs don't include the 'changed by' field for bulk operations. 3) API access logs have a 4-hour gap on Feb 14th with no explanation. Our auditors need a complete, unbroken chain of evidence. If we can't get clean logs, we'll fail our SOC2 Type II audit next month, which will cost us three major enterprise clients. We need your compliance team to investigate and provide corrected logs within 2 weeks.",
-            "customer_name": "Christine Palmer",
+            "id": "HARD-008",
+            "subject": "Webhook PII exposure - SOC2 compliance violation",
+            "body": "After your last release (v4.2.1), webhooks now include PII fields (email, phone) in the payload that weren't there before. We're sending these webhooks to a third-party analytics tool that is NOT approved for PII in our security policy. Was this an intentional feature addition or a regression? Either way, we need to either: a) roll back the webhook schema, or b) add field-level filtering. This is a potential compliance violation for us under SOC2 requirements and we need it resolved within 48 hours.",
+            "customer_name": "Samantha Wright",
             "customer_tier": "enterprise",
-            # Trap: "compliance team" and "SOC2 audit" strongly bias toward
-            # admin department. But the actual fix requires engineering to
-            # investigate log gaps and provide corrected data.
+            # Trap: SOC2/compliance language biases toward admin.
+            # But this is a code change that engineering must fix.
             "ground_truth": {
                 "category": "technical",
                 "priority": "critical",
@@ -373,19 +361,34 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             }
         },
         {
-            "id": "HARD-010",
-            "subject": "Conflicting information from sales and support about data retention",
-            "body": "I'm extremely frustrated. Your sales rep (Jake, ext 4421) told us in writing that our Enterprise plan includes unlimited data retention. But now support is telling us data older than 90 days will be purged next week under some new policy. We have 3 years of critical business data on your platform. We made our purchasing decision based on Jake's promise. I have the email thread saved. If our data gets purged, we'll be pursuing legal action. Please escalate this to someone who can actually make decisions and honor the commitments your sales team made.",
-            "customer_name": "Gregory Santos",
+            "id": "HARD-009",
+            "subject": "Renewal pricing dispute - competitor offering 60% less",
+            "body": "Our 3-year enterprise contract is up for renewal next month. Your renewal quote came in at $180k/year — a 20% increase. Meanwhile, CompetitorX is offering equivalent functionality at $72k/year with free migration support. Before we make a decision, I need: 1) Justification for the price increase when we've had 4 major outages this year, 2) A revised quote that's competitive, 3) An account credit of $15k for the SLA violations we documented but never received compensation for, 4) Written commitment to the feature roadmap items your PM promised us last quarter. We've been a loyal customer for 5 years but loyalty doesn't pay the bills.",
+            "customer_name": "Angela Morrison",
             "customer_tier": "enterprise",
-            # Trap: legal threats and data purging language may bias toward
-            # admin (legal) or technical (data). But this is fundamentally
-            # an account management escalation — resolving conflicting promises
-            # and protecting the customer relationship.
+            # Trap: mentions SLA violations (technical), feature roadmap,
+            # competitor comparison. LLMs may pick account/customer_success.
+            # But the primary action is billing/finance — contract negotiation
+            # and pricing dispute.
+            "ground_truth": {
+                "category": "billing",
+                "priority": "high",
+                "department": "finance",
+            }
+        },
+        {
+            "id": "HARD-010",
+            "subject": "Need to revoke ex-contractor access - security exposure",
+            "body": "We just discovered that a contractor we terminated 3 months ago (user: mike.contractor@external.com) still has active access to our enterprise account. He has admin-level permissions, can see all our client data, and his API key is still active. We terminated him for cause (data policy violations) and this is a massive security exposure. We need: 1) His access revoked immediately across all systems, 2) A complete audit log of everything he accessed in the last 90 days, 3) Confirmation his API key has been invalidated, 4) An explanation for why your platform didn't auto-revoke when we disabled his SSO. Our CISO is furious and wants a written incident report.",
+            "customer_name": "Patricia Wong",
+            "customer_tier": "enterprise",
+            # Trap: security language strongly biases toward technical/engineering.
+            # Audit logs sound technical. But this is fundamentally an account
+            # access management issue — revoking permissions, auditing access.
             "ground_truth": {
                 "category": "account",
                 "priority": "critical",
-                "department": "customer_success",
+                "department": "admin",
             }
         },
     ]
