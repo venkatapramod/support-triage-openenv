@@ -1,0 +1,51 @@
+name: support_triage_env
+version: "1.0.0"
+description: >
+  Customer Support Ticket Triage Environment. An AI agent reads customer support
+  tickets and must categorize them, assign priority, route to the correct department,
+  and suggest a response. Features 3 difficulty levels with 27 unique hand-crafted tickets.
+tasks:
+  - name: easy_triage
+    description: "Triage 8 straightforward support tickets with obvious categories and priorities"
+    difficulty: easy
+  - name: medium_triage
+    description: "Triage 9 moderately complex tickets requiring careful reading and reasoning"
+    difficulty: medium
+  - name: hard_triage
+    description: "Triage 10 complex, multi-issue tickets requiring nuanced judgment and domain knowledge"
+    difficulty: hard
+action_space:
+  type: object
+  properties:
+    category:
+      type: string
+      enum: [billing, technical, account, shipping, general]
+    priority:
+      type: string
+      enum: [critical, high, medium, low]
+    department:
+      type: string
+      enum: [engineering, finance, logistics, customer_success, admin]
+    suggested_response:
+      type: string
+observation_space:
+  type: object
+  properties:
+    ticket_id:
+      type: string
+    ticket_subject:
+      type: string
+    ticket_body:
+      type: string
+    customer_name:
+      type: string
+    customer_tier:
+      type: string
+      enum: [free, pro, enterprise]
+    feedback:
+      type: string
+    tickets_remaining:
+      type: integer
+    last_action_error:
+      type: string
+reward_range: [0.0, 1.0]
