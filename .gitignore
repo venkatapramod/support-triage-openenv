@@ -28,4 +28,5 @@ Thumbs.db
 .env.local
 
 # UV
-uv.lock
+
+!uv.lock
