@@ -18,7 +18,7 @@ VALID_CATEGORIES = {"billing", "technical", "account", "shipping", "general"}
 VALID_PRIORITIES = {"critical", "high", "medium", "low"}
 VALID_DEPARTMENTS = {"engineering", "finance", "logistics", "customer_success", "admin"}
 
-# Maximum attempts per ticket before skipping (prevents infinite loops)
+
 MAX_ATTEMPTS_PER_TICKET = 3
 
 
@@ -52,11 +52,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
         self._attempts_on_current: int = 0
         self._max_total_steps: int = 0
 
-<<<<<<< HEAD
     async def reset(
-=======
-    def reset(
->>>>>>> d8f35e60f36ccd10c0da311a0208ffbe29999d37
         self,
         seed: Optional[int] = None,
         episode_id: Optional[str] = None,
@@ -105,11 +101,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
             last_action_error=None,
         )
 
-<<<<<<< HEAD
     async def step(
-=======
-    def step(
->>>>>>> d8f35e60f36ccd10c0da311a0208ffbe29999d37
         self,
         action: TriageAction,
         timeout_s: Optional[float] = None,
@@ -119,7 +111,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
         self._state.step_count += 1
         self._attempts_on_current += 1
 
-        # Safety: terminate if total steps exceeded (prevents infinite loops)
+       
         if self._state.step_count > self._max_total_steps:
             self._rewards.append(0.0)
             return TriageObservation(
@@ -135,7 +127,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
                 last_action_error="Max steps exceeded",
             )
 
-        # Validate action fields
+        
         error = None
         if action.category not in VALID_CATEGORIES:
             error = f"Invalid category '{action.category}'. Must be one of: {sorted(VALID_CATEGORIES)}"
@@ -197,7 +189,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
                 last_action_error=error,
             )
 
-        # Valid action — grade it
+
         ticket = self._tickets[self._current_ticket_idx]
         gt = ticket["ground_truth"]
         reward = self._compute_reward(action, gt, ticket)
@@ -215,7 +207,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
         if action.department == gt["department"]:
             self._state.correct_departments += 1
 
-        # Build detailed feedback
+       
         feedback_parts = []
         if action.category == gt["category"]:
             feedback_parts.append("Category: CORRECT")
@@ -282,16 +274,16 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
         """
         reward = 0.0
 
-        # Category (35%)
+        
         if action.category == ground_truth["category"]:
             reward += 0.35
 
-        # Priority (25%)
+       
         priority_order = ["low", "medium", "high", "critical"]
         if action.priority == ground_truth["priority"]:
             reward += 0.25
         else:
-            # Partial credit for adjacent priority
+            
             try:
                 pred_idx = priority_order.index(action.priority)
                 true_idx = priority_order.index(ground_truth["priority"])
@@ -300,17 +292,17 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
             except ValueError:
                 pass
 
-        # Department (30%)
+       
         if action.department == ground_truth["department"]:
             reward += 0.30
 
-        # Response quality bonus (10%)
+       
         if action.suggested_response and len(action.suggested_response.strip()) > 10:
             response_lower = action.suggested_response.lower()
             subject_lower = ticket["subject"].lower()
             body_lower = ticket["body"].lower()
 
-            # Relevance check: response mentions keywords from ticket
+            
             key_words = set(subject_lower.split()) | set(body_lower.split()[:20])
             key_words = {w for w in key_words if len(w) > 4}
             matches = sum(1 for w in key_words if w in response_lower)
@@ -321,7 +313,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
 
             self._state.response_quality_sum += min(0.10, max(0, reward - 0.90))
 
-        # Clamp to [0.0, 1.0]
+        
         return max(0.0, min(reward, 1.0))
 
     def close(self):
@@ -330,9 +322,6 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
         self._rewards = []
         self._current_ticket_idx = 0
 
-<<<<<<< HEAD
-=======
     @property
->>>>>>> d8f35e60f36ccd10c0da311a0208ffbe29999d37
     def state(self) -> TriageState:
         return self._state
