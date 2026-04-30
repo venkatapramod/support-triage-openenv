@@ -1,5 +1,3 @@
-# Copyright (c) 2024. All rights reserved.
-# Support Ticket Triage Environment - Models
 
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
