@@ -2,11 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app/env
 
-# Install dependencies first (cache layer)
+
 COPY server/requirements.txt ./server/requirements.txt
 RUN pip install --no-cache-dir -r server/requirements.txt
 
-# Copy all environment code
+
 COPY models.py .
 COPY tickets.py .
 COPY __init__.py .
@@ -15,14 +15,14 @@ COPY server/__init__.py ./server/__init__.py
 COPY server/app.py ./server/app.py
 COPY server/triage_environment.py ./server/triage_environment.py
 
-# Set PYTHONPATH so imports work
+
 ENV PYTHONPATH=/app/env
 
-# HF Spaces expects port 7860
+
 ENV PORT=7860
 EXPOSE 7860
 
-# Default task
+
 ENV TRIAGE_TASK=easy_triage
 
 # Health check
