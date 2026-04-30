@@ -29,7 +29,7 @@ print("  OpenEnv Hackathon Pre-Submission Validator")
 print("=" * 60)
 print()
 
-# 1. Check inference.py exists in root
+
 print("--- File Structure ---")
 check("inference.py exists in root", os.path.isfile("inference.py"))
 check("models.py exists", os.path.isfile("models.py"))
@@ -42,7 +42,7 @@ check("server/triage_environment.py exists", os.path.isfile("server/triage_envir
 check("server/requirements.txt exists", os.path.isfile("server/requirements.txt"))
 print()
 
-# 2. Check inference.py content
+
 print("--- inference.py Checks ---")
 with open("inference.py", "r") as f:
     inf_content = f.read()
@@ -59,7 +59,7 @@ check("Has [STEP] log format", "[STEP]" in inf_content)
 check("Has [END] log format", "[END]" in inf_content)
 print()
 
-# 3. Check environment works
+
 print("--- Environment Tests ---")
 try:
     from server.triage_environment import SupportTriageEnvironment
@@ -70,7 +70,7 @@ except Exception as e:
     print("\nCannot continue without environment imports.")
     sys.exit(1)
 
-# Test all 3 tasks
+
 for task_name in ["easy_triage", "medium_triage", "hard_triage"]:
     try:
         env = SupportTriageEnvironment(task_name=task_name)
@@ -104,12 +104,12 @@ for task_name in ["easy_triage", "medium_triage", "hard_triage"]:
 
 print()
 
-# 4. Check grader gives different scores
+
 print("--- Grader Quality Checks ---")
 env = SupportTriageEnvironment(task_name="easy_triage")
 obs = env.reset(seed=42)
 
-# Perfect action for first ticket (billing)
+
 action_correct = TriageAction(
     category="billing", priority="high", department="finance",
     suggested_response="We will process your refund for the duplicate charge immediately."
@@ -119,7 +119,7 @@ obs_correct = env.step(action_correct)
 env2 = SupportTriageEnvironment(task_name="easy_triage")
 obs2 = env2.reset(seed=42)
 
-# Wrong action for first ticket
+
 action_wrong = TriageAction(
     category="shipping", priority="low", department="engineering",
     suggested_response="test"
@@ -139,7 +139,7 @@ check("Reward difference is meaningful",
       f"difference={r_correct - r_wrong:.2f}")
 print()
 
-# 5. Check FastAPI app
+#  Check FastAPI app
 print("--- Server Checks ---")
 try:
     os.environ["TRIAGE_TASK"] = "easy_triage"
@@ -166,7 +166,7 @@ except Exception as e:
 
 print()
 
-# 6. Check openenv.yaml
+
 print("--- openenv.yaml Checks ---")
 try:
     import yaml
@@ -187,7 +187,7 @@ except Exception as e:
 
 print()
 
-# Summary
+
 print("=" * 60)
 passed = sum(1 for _, ok in results if ok)
 total = len(results)
