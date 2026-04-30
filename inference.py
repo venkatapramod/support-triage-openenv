@@ -20,7 +20,7 @@ from typing import List, Optional
 
 from openai import OpenAI
 
-# ── Environment Variables ────────────────────────────────────────────────────
+
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
 HF_TOKEN = os.getenv("HF_TOKEN")
@@ -29,13 +29,13 @@ IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 if HF_TOKEN is None:
     raise ValueError("HF_TOKEN environment variable is required")
 
-# ── OpenAI Client ────────────────────────────────────────────────────────────
+
 client = OpenAI(
     base_url=API_BASE_URL,
     api_key=HF_TOKEN,
 )
 
-# ── Environment Config ───────────────────────────────────────────────────────
+
 ENV_NAME = "support_triage_env"
 MAX_STEPS = 30  # Safety limit across all tickets in a task
 TEMPERATURE = 0.1
@@ -83,7 +83,7 @@ SYSTEM_PROMPT = textwrap.dedent("""
 """).strip()
 
 
-# ── Logging helpers ──────────────────────────────────────────────────────────
+
 
 def log_start(task: str, env: str, model: str) -> None:
     print(f"[START] task={task} env={env} model={model}", flush=True)
@@ -103,7 +103,7 @@ def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> No
     print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
 
 
-# ── LLM call ─────────────────────────────────────────────────────────────────
+
 
 def call_llm(ticket_subject: str, ticket_body: str, customer_name: str, customer_tier: str) -> dict:
     """Call the LLM to triage a ticket. Returns parsed action dict."""
@@ -129,7 +129,7 @@ def call_llm(ticket_subject: str, ticket_body: str, customer_name: str, customer
         )
         content = (response.choices[0].message.content or "").strip()
 
-        # Strip markdown code fences if present
+        
         if content.startswith("```"):
             content = content.split("\n", 1)[1] if "\n" in content else content[3:]
         if content.endswith("```"):
@@ -157,7 +157,7 @@ def format_action_str(action: dict) -> str:
     return f"triage(cat={cat},pri={pri},dept={dept})"
 
 
-# ── Main inference loop ──────────────────────────────────────────────────────
+
 
 async def run_task(task_name: str) -> None:
     """Run a single task episode and emit structured logs."""
@@ -186,13 +186,13 @@ async def run_task(task_name: str) -> None:
         while not done and step_num < MAX_STEPS:
             step_num += 1
 
-            # Call LLM to decide triage action
+         
             llm_result = call_llm(
                 obs.ticket_subject, obs.ticket_body,
                 obs.customer_name, obs.customer_tier,
             )
 
-            # Create typed action
+            
             action = TriageAction(
                 category=llm_result.get("category", "general"),
                 priority=llm_result.get("priority", "medium"),
@@ -200,7 +200,7 @@ async def run_task(task_name: str) -> None:
                 suggested_response=llm_result.get("suggested_response", ""),
             )
 
-            # Step the environment
+           
 <<<<<<< HEAD
             obs = await env.step(action)
 =======
