@@ -1,5 +1,3 @@
-
-
 from typing import List, Dict, Any
 
 
@@ -120,7 +118,6 @@ def get_medium_tickets() -> List[Dict[str, Any]]:
             "body": "I paid for the Enterprise plan yesterday via wire transfer (confirmation #WT-44892). However, my dashboard still shows the Pro plan with Pro limits. My team of 50 needs access to the enterprise API endpoints by tomorrow for a product launch. This is blocking our entire release.",
             "customer_name": "David Rodriguez",
             "customer_tier": "enterprise",
-           
             "ground_truth": {
                 "category": "billing",
                 "priority": "critical",
@@ -133,7 +130,6 @@ def get_medium_tickets() -> List[Dict[str, Any]]:
             "body": "I upgraded to Pro three weeks ago and I'm being charged $29/month. However, the advanced analytics tab still shows a lock icon and says 'Upgrade to Pro to unlock'. I've logged out and back in, cleared my cache, tried different browsers. My billing page confirms I'm on the Pro plan. Is this a billing sync issue or a bug?",
             "customer_name": "Alex Kumar",
             "customer_tier": "pro",
-            
             "ground_truth": {
                 "category": "technical",
                 "priority": "high",
@@ -158,7 +154,6 @@ def get_medium_tickets() -> List[Dict[str, Any]]:
             "body": "Order #45231 has been stuck in 'In Transit' for 18 days now — the carrier says it's likely lost. I need two things: 1) a full refund for the $450 charge since I never received the item, and 2) a new shipment of the same order sent via expedited shipping at no extra cost. My credit card was charged on day one. This is unacceptable for the premium I pay.",
             "customer_name": "Jennifer Lee",
             "customer_tier": "enterprise",
-          
             "ground_truth": {
                 "category": "shipping",
                 "priority": "high",
@@ -183,7 +178,6 @@ def get_medium_tickets() -> List[Dict[str, Any]]:
             "body": "I've decided to cancel my Pro subscription at the end of this billing cycle. Before my account is deactivated, I need to export all my project data, client records, and report history. Can you walk me through the export process and confirm my cancellation date? Also, will I get a prorated refund for the unused portion?",
             "customer_name": "Brian Foster",
             "customer_tier": "pro",
-          
             "ground_truth": {
                 "category": "account",
                 "priority": "medium",
@@ -208,7 +202,6 @@ def get_medium_tickets() -> List[Dict[str, Any]]:
             "body": "Looking at my latest invoice, I'm being billed for 45 seats but we only have 32 active employees. The extra 13 seats are from people who left over the past few months. I assumed inactive accounts would stop being billed automatically. Can you remove those seats and credit us for the overcharges? Also, is there a way to set up automatic seat deprovisioning when we disable accounts in our SSO?",
             "customer_name": "Sandra Kim",
             "customer_tier": "enterprise",
-           
             "ground_truth": {
                 "category": "billing",
                 "priority": "high",
@@ -246,7 +239,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "URGENT: We're having a total meltdown here. First, our enterprise SSO stopped working at 2 AM, locking out 200+ employees. Second, while trying to fix it, someone accidentally deleted the admin account. Third, we have a board presentation at 9 AM today using data from your platform and the export feature is returning blank files. We're a Fortune 500 customer paying $50k/year. I need someone on the phone NOW.",
             "customer_name": "Margaret Thompson",
             "customer_tier": "enterprise",
-        
             "ground_truth": {
                 "category": "technical",
                 "priority": "critical",
@@ -259,7 +251,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "Per GDPR Article 17, I'm formally requesting the complete deletion of all personal data associated with my account (user ID: EU-78432) and any associated sub-accounts. This includes backups, logs, analytics data, and any third-party systems where my data may have been shared. I need written confirmation within 30 days as required by regulation. Please also provide a list of all third parties who have received my data. Note: I still want to keep using the service with a fresh account afterward.",
             "customer_name": "Hans Mueller",
             "customer_tier": "pro",
-         
             "ground_truth": {
                 "category": "account",
                 "priority": "critical",
@@ -272,7 +263,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "I'm extremely frustrated. Our Enterprise contract (signed Jan 2023, 3-year term) explicitly states 'unlimited cloud storage' in Section 4.2. Yesterday we received an email saying we've exceeded a '5TB fair use limit' that appears nowhere in our contract, and our upload speeds have been throttled to 1 Mbps. Our legal counsel has reviewed the contract and confirms there is no fair use clause. We demand immediate restoration of full upload speeds and a written acknowledgment that no storage limits apply to our account. If not resolved by EOD Friday, we'll be filing a formal breach of contract claim.",
             "customer_name": "Victoria Sterling",
             "customer_tier": "enterprise",
-         
             "ground_truth": {
                 "category": "billing",
                 "priority": "critical",
@@ -285,7 +275,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "Following our acquisition of TechCorp and DataFlow Inc last month, we now have 3 separate enterprise accounts on your platform (IDs: ENT-001, ENT-445, ENT-892) that need to be merged into one. Combined we have 800+ users, 15TB of data, and hundreds of custom integrations. We need: 1) All data migrated to a single account without any loss, 2) User permissions preserved from all three accounts, 3) Billing consolidated to a single invoice, 4) API keys and webhooks remapped. Our CTO wants this done within 60 days. What's the process?",
             "customer_name": "Richard Yamamoto",
             "customer_tier": "enterprise",
-        .
             "ground_truth": {
                 "category": "account",
                 "priority": "high",
@@ -298,7 +287,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "This is my FOURTH ticket about the same issue. Every day between 2-4 PM EST, our dashboard becomes unusably slow (30+ second load times). Previous tickets #1234, #1567, and #1890 were all closed with 'resolved' but NOTHING has changed. Your support team keeps blaming our network but I've done traceroutes, tested from 3 different ISPs and offices. We're in month 2 of a 3-year contract and I'm talking to our legal team about the SLA violation clause. If this isn't fixed this week, we're escalating to your VP of Engineering.",
             "customer_name": "Robert Kim",
             "customer_tier": "enterprise",
-    
             "ground_truth": {
                 "category": "technical",
                 "priority": "critical",
@@ -311,7 +299,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "Before signing our $120k/year enterprise contract, your sales rep Jake (ext 4421) specifically demonstrated a 'real-time collaboration' feature during our eval. He showed us live co-editing of documents with presence indicators and conflict resolution. We signed largely because of this capability. Now that we're onboarded, this feature doesn't exist anywhere in the product. When I asked support, they said it's 'on the roadmap for Q4.' We signed a contract based on a feature demo that was apparently faked. I want either: a) the feature delivered within 30 days as demonstrated, or b) a full contract refund. Our legal team is preparing a misrepresentation claim.",
             "customer_name": "Natasha Volkov",
             "customer_tier": "enterprise",
-         
             "ground_truth": {
                 "category": "account",
                 "priority": "critical",
@@ -324,7 +311,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "Our bulk order of 200 units (PO #INTL-7789, value $340,000) has been seized by German customs because the commercial invoice lists the wrong HS tariff code and the country of origin is missing. The customs broker says the shipment will be destroyed if proper documentation isn't provided within 10 business days. We also discovered the declared value on the export docs shows $50,000 instead of $340,000 — this looks like it could be flagged as customs fraud. We need corrected commercial invoices, proper certificates of origin, and someone to liaise with our customs broker in Frankfurt IMMEDIATELY. This is a potential criminal matter if not resolved.",
             "customer_name": "Klaus Weber",
             "customer_tier": "enterprise",
-       
             "ground_truth": {
                 "category": "shipping",
                 "priority": "critical",
@@ -337,7 +323,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "After your last release (v4.2.1), webhooks now include PII fields (email, phone) in the payload that weren't there before. We're sending these webhooks to a third-party analytics tool that is NOT approved for PII in our security policy. Was this an intentional feature addition or a regression? Either way, we need to either: a) roll back the webhook schema, or b) add field-level filtering. This is a potential compliance violation for us under SOC2 requirements and we need it resolved within 48 hours.",
             "customer_name": "Samantha Wright",
             "customer_tier": "enterprise",
-       
             "ground_truth": {
                 "category": "technical",
                 "priority": "critical",
@@ -350,7 +335,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "Our 3-year enterprise contract is up for renewal next month. Your renewal quote came in at $180k/year — a 20% increase. Meanwhile, CompetitorX is offering equivalent functionality at $72k/year with free migration support. Before we make a decision, I need: 1) Justification for the price increase when we've had 4 major outages this year, 2) A revised quote that's competitive, 3) An account credit of $15k for the SLA violations we documented but never received compensation for, 4) Written commitment to the feature roadmap items your PM promised us last quarter. We've been a loyal customer for 5 years but loyalty doesn't pay the bills.",
             "customer_name": "Angela Morrison",
             "customer_tier": "enterprise",
-  
             "ground_truth": {
                 "category": "billing",
                 "priority": "high",
@@ -363,7 +347,6 @@ def get_hard_tickets() -> List[Dict[str, Any]]:
             "body": "We just discovered that a contractor we terminated 3 months ago (user: mike.contractor@external.com) still has active access to our enterprise account. He has admin-level permissions, can see all our client data, and his API key is still active. We terminated him for cause (data policy violations) and this is a massive security exposure. We need: 1) His access revoked immediately across all systems, 2) A complete audit log of everything he accessed in the last 90 days, 3) Confirmation his API key has been invalidated, 4) An explanation for why your platform didn't auto-revoke when we disabled his SSO. Our CISO is furious and wants a written incident report.",
             "customer_name": "Patricia Wong",
             "customer_tier": "enterprise",
-
             "ground_truth": {
                 "category": "account",
                 "priority": "critical",
