@@ -12,6 +12,14 @@ tags:
 
 A real-world OpenEnv environment where an AI agent triages customer support tickets by categorizing them, assigning priority levels, routing to the correct department, and suggesting responses.
 
+## 🌐 Live Demo
+
+🔗 **Interactive API:** [Try the live environment](https://pramod999-support-triage-env.hf.space/docs)
+
+Hit `/reset` to receive a customer ticket, then `/step` with a triage action (category/priority/department/response) to see the reward function score your decision in real time.
+
+Hosted on Hugging Face Spaces.
+
 ## Why This Environment?
 
 Customer support triage is a high-impact, real-world task performed millions of times daily across industries. Getting it right means faster resolution times, happier customers, and lower operational costs. Getting it wrong means escalations, churn, and lost revenue.
