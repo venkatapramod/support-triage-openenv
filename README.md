@@ -18,6 +18,15 @@ Customer support triage is a high-impact, real-world task performed millions of 
 
 This environment challenges an AI agent to make **four decisions** per ticket under realistic conditions — ambiguous language, multi-issue tickets, varying customer tiers, and time-sensitive situations.
 
+## 🎯 What This Demonstrates
+
+- **Environment design** — custom OpenEnv-compliant environment with structured action space, observation space, reward function, and episode state management
+- **Production API** — FastAPI server with `/health`, `/reset`, `/step`, `/state`, `/schema`, and `/tasks` endpoints; OpenAPI docs auto-generated at `/docs`
+- **Reward engineering** — multi-component scoring (category 35%, priority 25%, department 30%, response quality 10%) with partial credit for adjacent priority levels
+- **Evaluation methodology** — 27 hand-crafted tickets across 3 difficulty tiers, designed to test single-issue vs. multi-issue reasoning
+- **LLM benchmarking** — inference harness against Qwen2.5-72B-Instruct via Hugging Face, with structured logging
+- **Engineering rigor** — Pydantic models, Docker containerization, retry logic with max-attempts cap, automated pre-submission validator with 30+ checks
+
 ## Tasks
 
 | Task | Difficulty | Tickets | Description |
@@ -36,7 +45,7 @@ Tested with `Qwen/Qwen2.5-72B-Instruct` via Hugging Face Inference:
 | medium_triage | 9 | ~0.72 | Ambiguous categories trip up naive classification |
 | hard_triage | 10 | ~0.68 | Multi-issue tickets with competing categorizations |
 
-**27 total tickets** across 3 difficulty levels. The medium task's ambiguity (e.g., a ticket mentioning both billing and technical symptoms) tests whether the agent can identify the root cause. The hard task's multi-issue tickets (e.g., SSO failure + deleted admin + broken exports) require prioritizing the most critical aspect.
+**27 total tickets** across 3 difficulty levels.
 
 ## Action Space
 
@@ -148,6 +157,18 @@ docker build -t support-triage-env .
 docker run -p 7860:7860 support-triage-env
 ```
 
+## 🔨 What I Built
+
+The OpenEnv framework provides the base `Environment` class and HTTP server scaffolding. Everything below is original work for this project:
+
+- **Domain dataset** (`tickets.py`) — 27 hand-crafted support tickets across easy/medium/hard tiers
+- **Triage environment** (`server/triage_environment.py`) — episode lifecycle, multi-component reward function with partial credit, retry-with-skip logic for invalid actions, structured per-step feedback
+- **Reward function** — weighted scoring across category, priority, department, and response quality with adjacent-priority partial credit
+- **FastAPI application** (`server/app.py`) — REST endpoints, environment factory, task selection via env vars
+- **Inference harness** (`inference.py`) — OpenAI-compatible client with structured `[START]/[STEP]/[END]` logging
+- **Validation suite** (`validate.py`) — 30+ programmatic checks covering file structure, API contract, reward bounds, and server health
+- **Container & deployment** — Dockerfile with health check, `openenv.yaml` manifest
+
 ## API Endpoints
 
 | Endpoint | Method | Description |
@@ -187,18 +208,19 @@ support_triage_env/
 | `API_BASE_URL` | No | `https://router.huggingface.co/v1` | LLM API endpoint |
 | `MODEL_NAME` | No | `Qwen/Qwen2.5-72B-Instruct` | Model identifier |
 | `HF_TOKEN` | Yes | — | API key (no default) |
-| `LOCAL_IMAGE_NAME` | No | — | Docker image name for from_docker_image() |
 | `TRIAGE_TASK` | No | `easy_triage` | Task to load on server |
 
 ## Design Decisions
 
 - **27 hand-crafted tickets** rather than synthetic data — each ticket is realistic and tests specific triage skills
-- **Deliberately ambiguous medium tickets** — category/priority traps where surface-level keywords mislead (e.g., a ticket mentioning "billing" that's actually a technical sync issue)
 - **Partial credit scoring** — adjacent priority levels get partial reward, encouraging the agent to learn the priority spectrum
-- **Response quality bonus** — rewards agents that generate relevant responses, not just classify correctly
-- **Max attempts per ticket** — invalid actions get 3 retries before the ticket is skipped, preventing infinite loops while giving the agent a chance to correct
-- **Error handling** — invalid actions return 0.0 reward with clear error messages; the episode continues
+- **Max attempts per ticket** — invalid actions get 3 retries before the ticket is skipped, preventing infinite loops
 - **All rewards in [0.0, 1.0]** — no negative rewards, compliant with OpenEnv spec
+
+## Scope
+
+- Prototype-scale dataset (27 tickets) demonstrating environment architecture and reward design
+- Single-label routing for simplicity and reproducibility
 
 ## License
 
