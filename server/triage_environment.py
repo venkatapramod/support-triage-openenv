@@ -52,7 +52,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
         self._attempts_on_current: int = 0
         self._max_total_steps: int = 0
 
-    async def reset(
+    def reset(
         self,
         seed: Optional[int] = None,
         episode_id: Optional[str] = None,
@@ -101,7 +101,7 @@ class SupportTriageEnvironment(Environment[TriageAction, TriageObservation, Tria
             last_action_error=None,
         )
 
-    async def step(
+    def step(
         self,
         action: TriageAction,
         timeout_s: Optional[float] = None,
